@@ -13,16 +13,21 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Mirror to GitLab
+    - name: Configure Git to use GitLab token for authentication
       env:
         GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
-        GITLAB_REPO_URL: ${{ secrets.GITLAB_REPO_URL }}
       run: |
         # Configure Git to use GitLab token for authentication
-        git config --global url."https://${GITLAB_TOKEN}:x-oauth-basic@${GITLAB_REPO_URL#https://}".insteadOf "https://gitlab.com/"
-
+        git config --global url."https://${GITLAB_TOKEN}:x-oauth-basic@gitlab.com/".insteadOf "https://gitlab.com/"
+        
+    - name: Add GitLab repository as a remote
+      env:
+        GITLAB_REPO_URL: ${{ secrets.GITLAB_REPO_URL }}
+      run: |
         # Add GitLab repository as a remote
         git remote add gitlab $GITLAB_REPO_URL
         
+    - name: Push all branches and tags to GitLab
+      run: |
         # Push all branches and tags to GitLab
         git push --mirror gitlab
