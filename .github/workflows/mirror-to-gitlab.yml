@@ -3,7 +3,7 @@ name: Sync GitHub to GitLab
 on:
   push:
     branches:
-      - main  # or any branch you want to trigger on
+      - main  # or the branch you want to sync
 
 jobs:
   sync:
@@ -19,6 +19,11 @@ jobs:
           git remote add gitlab https://gitlab.com/getachewgetu/github-gitlab-pipline-setup.git
         env:
           GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+
+      - name: Verify remote repository
+        run: |
+          git remote -v
+        # This step will print the remote URLs to ensure they are set correctly.
 
       - name: Push to GitLab
         run: |
