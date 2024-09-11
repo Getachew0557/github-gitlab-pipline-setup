@@ -19,10 +19,10 @@ jobs:
         GITLAB_REPO_URL: ${{ secrets.GITLAB_REPO_URL }}
       run: |
         # Configure Git to use GitLab token for authentication
-        git config --global url."https://${GITLAB_TOKEN}@gitlab.com/".insteadOf "https://gitlab.com/"
+        git config --global url."https://${GITLAB_TOKEN}:x-oauth-basic@gitlab.com/".insteadOf "https://gitlab.com/"
 
         # Add GitLab repository as a remote
-        git remote add gitlab $GITLAB_REPO_URL
+        git remote add gitlab https://gitlab.com/getachewgetu/github-gitlab-pipline-setup.git
         
         # Push all branches and tags to GitLab
         git push --mirror gitlab
