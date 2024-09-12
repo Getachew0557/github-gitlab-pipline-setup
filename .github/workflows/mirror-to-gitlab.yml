@@ -28,4 +28,4 @@ jobs:
     - name: Mirror to GitLab
       run: |
         git remote add gitlab ${{ secrets.GITLAB_URL }}
-        git push --mirror gitlab
+        git push gitlab main  # Push specific branches
