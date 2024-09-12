@@ -1,0 +1,11 @@
+# Ignore Python cache and virtual environment files
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Ignore Docker-related files
+*.log
+*.tmp
+
+# Ignore Streamlit cache
+.cache/
