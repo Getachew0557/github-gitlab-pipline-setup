@@ -1,32 +1,24 @@
-name: Sync GitHub to GitLab
+name: Mirror to GitLab
 
 on:
   push:
     branches:
-      - main  # or the branch you want to sync
+      - main  # or whatever branch you want to mirror
 
 jobs:
-  sync:
+  mirror:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      - name: Configure Git for GitLab
-        run: |
-          git config --global url."https://${{ secrets.GITLAB_TOKEN }}:x-oauth-basic@gitlab.com/".insteadOf "https://gitlab.com/"
-          git remote add gitlab https://gitlab.com/getachewgetu/github-gitlab-pipline-setup.git
-        env:
-          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+    - name: Set up SSH key for GitLab
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.GITLAB_SSH_PRIVATE_KEY }}
 
-      - name: Verify remote repository
-        run: |
-          git remote -v
-        # This step will print the remote URLs to ensure they are set correctly.
-
-      - name: Push to GitLab
-        run: |
-          git push --mirror gitlab
-        env:
-          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+    - name: Mirror to GitLab
+      run: |
+        git remote add gitlab ${{ secrets.GITLAB_URL }}
+        git push --mirror gitlab
