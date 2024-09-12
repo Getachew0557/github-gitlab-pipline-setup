@@ -25,12 +25,7 @@ jobs:
         mkdir -p ~/.ssh
         ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
 
-    - name: Verify refs on GitLab
-      run: |
-        git remote add gitlab ${{ secrets.GITLAB_URL }}
-        git fetch gitlab
-        git branch -r  # List remote branches to verify ref visibility
-
     - name: Mirror to GitLab
       run: |
+        git remote add gitlab ${{ secrets.GITLAB_URL }}
         git push --mirror gitlab
